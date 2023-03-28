@@ -1,0 +1,204 @@
+{
+    "title": {
+        "name": "title",
+        "description": "请输入一个自定义的名称.(请具有一定的标识性, 且不要包含'(单引号),\"(双引号)等转义字符)",
+        "detailedinfo": "主要方便后期查找.",
+        "required": true,
+        "default": "",
+        "type": "string"
+    },
+    "repository": {
+        "name": "repository",
+        "description": "请选择编译依赖的基础库.(pocopico_develop 以外均为默认jun模式)",
+        "detailedinfo": "请选择编译依赖的基础库.型号和版本均已库支持为准.\nwjz304_test*仅用于编译测试, 请勿选.",
+        "required": true,
+        "default": "pocopico",
+        "type": "choice",
+        "options": [
+            "pocopico_develop",
+            "pocopico_jun",
+            "jumkey_develop",
+            "PeterSuh-Q3_master",
+            "wjz304_test-dev",
+            "wjz304_test-jun"
+        ]
+    },
+    "platform": {
+        "name": "platform",
+        "description": "请选择你需要编译的型号(具体包含型号以基础库支持为准).",
+        "detailedinfo": "请选择你需要编译的型号(具体包含版本以基础库支持为准).",
+        "required": true,
+        "default": "DS3622xs+",
+        "type": "choice",
+        "options": [
+            "DS918+",
+            "DS920+",
+            "DS923+",
+            "DS1520+",
+            "DS1621+",
+            "DS2422+",
+            "DS3615xs",
+            "DS3617xs",
+            "DS3622xs+",
+            "DVA1622",
+            "DVA3221",
+            "FS2500",
+            "RS4021xs+"
+        ]
+    },
+    "version": {
+        "name": "version",
+        "description": "请选择你需要编译的版本(具体包含版本以基础库支持为准).",
+        "detailedinfo": "请选择你需要编译的版本(具体包含版本以基础库支持为准).",
+        "required": true,
+        "default": "7.0.1-42218",
+        "type": "choice",
+        "options": [
+            "7.1.1-42962",
+            "7.1.0-42661",
+            "7.0.1-42218",
+            "6.2.4-25556"
+        ]
+    },
+    "lkm": {
+        "name": "lkm",
+        "description": "如不了解请保持默认, 请选择 LKM 版本.(目前具体有何区别不详)",
+        "detailedinfo": "请选择 LKM 版本",
+        "required": false,
+        "default": "redpill",
+        "type": "choice",
+        "options": [
+            "redpill",
+            "redpilldev",
+            "redpillprod"
+        ]
+    },
+    "config": {
+        "name": "config",
+        "description": "如不了解请保持默认, 设置 user_config.json 的 base 参数, 默认: 无",
+        "detailedinfo": "config会被优先读取, 因此以下参数会覆盖config的内容. 仅建议在以下配置项无法满足需求时使用.",
+        "required": false,
+        "default": "",
+        "type": "string"
+    },
+    "maxdisks": {
+        "name": "maxdisks",
+        "description": "如不了解请保持默认, 请输入最大硬盘数. 默认: 无, 范围: 1~48",
+        "detailedinfo": "请输入最大硬盘数.",
+        "required": false,
+        "default": "",
+        "type": "string"
+    },
+    "maxlanport": {
+        "name": "maxlanport",
+        "description": "如不了解请保持默认, 请输入最大网卡索引. 默认: 7, 范围: 0~47",
+        "detailedinfo": "请输入最大网卡索引.",
+        "required": false,
+        "default": "7",
+        "type": "string"
+    },
+    "internalportcfg": {
+        "name": "internalportcfg",
+        "description": "如不了解请保持默认, 请输入 sata 接口配置 internalportcfg(十六进制数). 默认: 0xffff",
+        "detailedinfo": "以上数值为16进制, 将其转换为2进制进行理解.\n群晖内使用“1”表示存在这个接口, “0”表示不存在这个接口.\n 0xffff 转为2进制为“1111,1111,1111,1111”, 即 1-16 号硬盘为内部sata硬盘\n与esataportcfg和usbportcfg不应该出现重复.",
+        "required": false,
+        "default": "0xffff",
+        "type": "string"
+    },
+    "esataportcfg": {
+        "name": "esataportcfg",
+        "description": "如不了解请保持默认, 请输入 esata 接口配置 esataportcfg(十六进制数). 默认: 无",
+        "detailedinfo": "以上数值为16进制, 将其转换为2进制进行理解.\n群晖内使用“1”表示存在这个接口, “0”表示不存在这个接口.\n 0xf000 转为2进制为“1111,0000,0000,0000”, 即 13-16 号硬盘为内部esata硬盘\n与internalportcfg和usbportcfg不应该出现重复.",
+        "required": false,
+        "default": "",
+        "type": "string"
+    },
+    "usbportcfg": {
+        "name": "usbportcfg",
+        "description": "如不了解请保持默认, 请输入 usb 接口配置 usbportcfg(十六进制数). 默认: 无",
+        "detailedinfo": "以上数值为16进制, 将其转换为2进制进行理解.\n群晖内使用“1”表示存在这个接口, “0”表示不存在这个接口.\n 0xf0 转为2进制为“1111,0000”, 即 5-8 号硬盘为usb硬盘\n与internalportcfg和esataportcfg不应该出现重复.",
+        "required": false,
+        "default": "",
+        "type": "string"
+    },
+    "sn": {
+        "name": "sn",
+        "description": "请输入序列号. 默认: 根据型号随机生成.",
+        "detailedinfo": "请输入序列号.",
+        "required": false,
+        "default": "",
+        "type": "none"
+    },
+    "mac": {
+        "name": "mac",
+        "description": "请输入MAC地址, 多个请以','间隔. 默认: 根据型号随机生成(个数与 netif_num 保持一致).",
+        "detailedinfo": "请输入MAC地址.",
+        "required": false,
+        "default": "",
+        "type": "none"
+    },
+    "netif_num": {
+        "name": "netif_num",
+        "description": "请输入网卡数量 netif_num. 默认: 2, 范围: 1~8",
+        "detailedinfo": "请输入网卡数量, netif_num 应小于 maxlanport + 1.",
+        "required": false,
+        "default": "2",
+        "type": "string"
+    },
+    "vid": {
+        "name": "vid",
+        "description": "请输入USB设备供应商识别码(Vender ID). 默认: 0x46f4",
+        "detailedinfo": "请输入USB设备供应商识别码(Vender ID), 应与“pid”成对设置, \n虚拟环境请保持默认.",
+        "required": false,
+        "default": "0x46f4",
+        "type": "string"
+    },
+    "pid": {
+        "name": "pid",
+        "description": "请输入USB设备产品识别码(Product ID). 默认: 0x0001",
+        "detailedinfo": "请输入USB设备供应商识别码(Product ID), 应与“vid”成对设置, \n虚拟环境请保持默认.",
+        "required": false,
+        "default": "0x0001",
+        "type": "string"
+    },
+    "diskidxmap": {
+        "name": "diskidxmap",
+        "description": "请输入SATA控制器盘序 DiskIdxMap. 部分型号不需要填写(鼠标悬停查看气泡). 默认: 无",
+        "detailedinfo": "不需要填写的型号: DS920+, DS923+, DS1520+, DS1621+, DS1821+, DS2422+, DVA1622, FS2500, SA6400. \n按顺序从左到右每两位数为一个控制器的盘序数值,这两位数为16进制数, 不足两位前面补0,\n比如SataPortMap=148 时 DiskIdxMap=000105 的表示:\n第一个控制器的磁盘从序号1开始往后排,\n第二个控制器的磁盘从序号2开始往后排,\n第三个驱动器的磁盘从序号6开始往后排.\n此时在群晖系统里面看到磁盘序号就是1-13连续的.",
+        "required": false,
+        "default": "",
+        "type": "string"
+    },
+    "sataportmap": {
+        "name": "sataportmap",
+        "description": "请输入SATA控制器盘数 SataPortMap. 部分型号不需要填写(鼠标悬停查看气泡). 默认: 无",
+        "detailedinfo": "不需要填写的型号: DS920+, DS923+, DS1520+, DS1621+, DS1821+, DS2422+, DVA1622, FS2500, SA6400. \n在群辉系统中, 一个控制器默认只能控制9个硬盘, 所以SataPortMap=的数值范围只能是0-9,\n0则表示屏蔽该控制器, 不可以设为SataPortMap=0来隐藏引导盘!\nSataPortMap=148表示第一个控制器有1个硬盘, 第二个控制器有4个硬盘, 第三个控制器有8个硬盘.",
+        "required": false,
+        "default": "",
+        "type": "string"
+    },
+    "sasidxmap": {
+        "name": "sasidxmap",
+        "description": "请输入SAS控制器盘数 SasIdxMap. 部分型号不需要填写(鼠标悬停查看气泡). 默认: 无",
+        "detailedinfo": "不需要填写的型号: DS920+, DS923+, DS1520+, DS1621+, DS1821+, DS2422+, DVA1622, FS2500, SA6400. \n默认使用SATA硬盘的时候设置为0.",
+        "required": false,
+        "default": "",
+        "type": "string"
+    },
+    "dtb": {
+        "name": "dtb",
+        "description": "请输入 dtb 文件的下载链接(空:自动), 仅部分型号需要填写(鼠标悬停查看气泡). ",
+        "detailedinfo": "需要填写的型号: DS920+, DS923+, DS1520+, DS1621+, DS1821+, DS2422+, DVA1622, FS2500, SA6400. \n需要自行制作dts/dtb 文件, 制作方法参考主页说明. (支持的文件类型: .dts,.dtb,.tar.gz,.zip)\n该字段可填入三种类型:\n空(不填写): 将自动编译.(适用于硬盘数<=4个 且不需要插满.).\n空(不填写)且ext中加入‘-dtb,dtbpatch’: 将自动编译.(自动识别已插入硬盘（增加硬盘重启即可）).\nURL(dtb的下载链接): 将在编译时植入使用.",
+        "required": false,
+        "default": "",
+        "type": "string"
+    },
+    "ext": {
+        "name": "ext",
+        "description": "请输入需要集成的扩展, 多个请以','间隔(请酌情添加, 太多编不过). eg: r8125, tg3",
+        "detailedinfo": "普通模式默认使用pocopico的驱动库,\ndev模式默认使用我fork的驱动库(如果报 Checksum 错, 请尝试使用(dev)模式)\n第三方驱动请在issues页面手动加入.",
+        "required": false,
+        "default": "",
+        "type": "string"
+    }
+}

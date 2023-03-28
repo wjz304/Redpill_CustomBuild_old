@@ -1,0 +1,38 @@
+#
+# Copyright (C) 2022 Ing <https://github.com/wjz304>
+# 
+# This is free software, licensed under the MIT License.
+# See /LICENSE for more information.
+#
+
+
+name: Refresh CDN
+on:
+  push:
+  workflow_dispatch:
+
+jobs:
+  refresh:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@main
+
+      - name: Refresh CDN
+        run : |
+          git config --global user.email "github-actions[bot]@users.noreply.github.com"
+          git config --global user.name "github-actions[bot]"
+          sudo timedatectl set-timezone "Asia/Shanghai"
+
+          curl -L "https://purge.jsdelivr.net/gh/wjz304/Redpill_CustomBuild@main/parameter.json"
+          curl -L "https://purge.jsdelivr.net/gh/wjz304/Redpill_CustomBuild@main/loads.json"
+          curl -L "https://purge.jsdelivr.net/gh/wjz304/Redpill_CustomBuild@main/exts.json"
+          curl -L "https://purge.jsdelivr.net/gh/wjz304/Redpill_CustomBuild@main/lkms.json"
+          curl -L "https://purge.jsdelivr.net/gh/wjz304/Redpill_CustomBuild@main/tips.md"
+          
+          curl -I "https://cdn.statically.io/gh/wjz304/Redpill_CustomBuild/main/parameter.json"
+          curl -I "https://cdn.statically.io/gh/wjz304/Redpill_CustomBuild/main/loads.json"
+          curl -I "https://cdn.statically.io/gh/wjz304/Redpill_CustomBuild/main/exts.json"
+          curl -I "https://cdn.statically.io/gh/wjz304/Redpill_CustomBuild/main/lkms.json"
+          curl -I "https://cdn.statically.io/gh/wjz304/Redpill_CustomBuild/main/tips.md"
+          

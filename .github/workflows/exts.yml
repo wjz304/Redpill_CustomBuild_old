@@ -1,0 +1,321 @@
+#
+# Copyright (C) 2022 Ing <https://github.com/wjz304>
+# 
+# This is free software, licensed under the MIT License.
+# See /LICENSE for more information.
+#
+
+name: Get Exts and Loads
+
+on:
+  schedule:
+    - cron: '0 0 * * *'
+
+  workflow_dispatch:
+
+jobs:
+  exts:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@main
+
+      - name: Initialization environment
+        run : |
+          git config --global user.email "github-actions[bot]@users.noreply.github.com"
+          git config --global user.name "github-actions[bot]"
+          sudo timedatectl set-timezone "Asia/Shanghai"
+
+      - name: Checkout rp-ext s
+        run: |
+          sudo rm -rf rp-ext_pocopico
+          git clone https://github.com/pocopico/rp-ext rp-ext_pocopico
+          # 容错
+          rm -f rp-ext_pocopico/asix/releases/ds3617xs_42218.json
+          rm -f rp-ext_pocopico/ax88179_178a/releases/ds3617xs_42218.json
+          rm -f rp-ext_pocopico/dm9601/releases/ds3617xs_42218.json
+          rm -f rp-ext_pocopico/nct6775/releases/dva3221_42218.json
+          rm -f rp-ext_pocopico/sfc/releases/ds918p_25556.json
+          rm -f rp-ext_pocopico/v9fs/releases/ds918p_42218.json
+        
+          #igc 临时对策
+          rm -rf rp-ext_pocopico/igc
+          svn co https://github.com/jim3ma/synology-igc/trunk/igc rp-ext_pocopico/igc
+
+
+          sudo rm -rf rp-ext_wjz304
+          git clone https://github.com/wjz304/rp-ext rp-ext_wjz304
+          # 容错
+          rm -f rp-ext_wjz304/asix/releases/ds3617xs_42218.json
+          rm -f rp-ext_wjz304/ax88179_178a/releases/ds3617xs_42218.json
+          rm -f rp-ext_wjz304/dm9601/releases/ds3617xs_42218.json
+          rm -f rp-ext_wjz304/nct6775/releases/dva3221_42218.json
+          rm -f rp-ext_wjz304/sfc/releases/ds918p_25556.json
+          rm -f rp-ext_wjz304/v9fs/releases/ds918p_42218.json
+
+          #igc 临时对策
+          rm -rf rp-ext_wjz304/igc
+          svn co https://github.com/jim3ma/synology-igc/trunk/igc rp-ext_wjz304/igc
+
+
+      - name: Get exts lsit
+        shell: python
+        run: |
+          # -*- coding: utf-8 -*-
+
+          import os, json, hashlib
+
+          root = '' # os.path.dirname(os.path.abspath(__file__))
+
+          def getjsonfile(file):
+              data = None
+              if os.path.isfile(file):
+                  try:
+                      with open(file, 'r') as f:
+                          data = json.load(f)
+                  except Exception as err:
+                      print(err)
+              return data
+
+          def sha256sum(file):
+              sha256 = ''
+              if os.path.isfile(file):
+                  with open(file, "rb") as f:
+                      sha256=hashlib.sha256(f.read()).hexdigest()
+              return sha256
+
+          def pathstrsub(exp, reglist=[]):
+              ret = exp
+              try:
+                  for re in reglist:
+                      ret = ret.replace(re[0], re[1])
+              except Exception as err:
+                  print(err)
+              return ret
+
+          def getextslist(work = 'rp-ext', reglist=[]):
+              exts = {}
+              try:
+                  jext = 'rpext-index.json'
+                  extdirs = os.listdir(os.path.join(root, work))
+                  extdirs.sort()
+                  print(extdirs)
+                  for extdir in extdirs:
+                      if extdir.startswith('.') or extdir.startswith('redpill'):
+                          continue
+                      if os.path.isdir(os.path.join(root, work, extdir)):
+                          data_index = getjsonfile(os.path.join(root, work, extdir, jext))
+                          if data_index != None:
+                              try:
+                                  keys = data_index["releases"].keys()
+                                  for key in keys:
+                                      suffix = ''
+                                      data_releases = getjsonfile(os.path.join(root, work, pathstrsub(data_index["releases"][key], reglist)))
+                                      if data_releases != None:
+                                          if "files" in data_releases:
+                                              for file in data_releases["files"]:
+                                                  sha256_online = file["sha256"]
+                                                  sha256_local = sha256sum(os.path.join(root, work, pathstrsub( file["url"], reglist)))
+                                                  if sha256_online != sha256_local:
+                                                      suffix = '#'
+                                                      print('file: {} -- key: {} -- error: {} -- really: {}'.format(pathstrsub(data_index["releases"][key], reglist), pathstrsub(file["url"], reglist), sha256_online, sha256_local))
+                                      else:
+                                          suffix = '*'
+                                          print('file: {} -- may not exists'.format(pathstrsub(data_index["releases"][key], reglist)))
+                                      if key in exts.keys():
+                                          exts[key][extdir + suffix] = data_index["info"]["description"]
+                                      else:
+                                          exts[key] = { extdir + suffix: data_index["info"]["description"]}
+                              except Exception as err:
+                                  print(err)
+              except Exception as err:
+                  print(err)
+              return exts
+
+          def getlkmslist(work = 'rp-ext', reglist=[]):
+              lkms = {}
+              try:
+                  jext = 'rpext-index.json'
+                  extdirs = os.listdir(os.path.join(root, work))
+                  extdirs.sort()
+                  print(extdirs)
+                  for extdir in extdirs:
+                      if not extdir.startswith('redpill') or '-' in extdir:
+                          continue
+                      if os.path.isdir(os.path.join(root, work, extdir)):
+                          data_index = getjsonfile(os.path.join(root, work, extdir, jext))
+                          if data_index != None:
+                              try:
+                                  keys = data_index["releases"].keys()
+                                  for key in keys:
+                                      suffix = ''
+                                      data_releases = getjsonfile(os.path.join(root, work, pathstrsub(data_index["releases"][key], reglist)))
+                                      if data_releases != None:
+                                          if "files" in data_releases:
+                                              for file in data_releases["files"]:
+                                                  sha256_online = file["sha256"]
+                                                  sha256_local = sha256sum(os.path.join(root, work, pathstrsub( file["url"], reglist)))
+                                                  if sha256_online != sha256_local:
+                                                      suffix = '#'
+                                                      print('file: {} -- key: {} -- error: {} -- really: {}'.format(pathstrsub(data_index["releases"][key], reglist), pathstrsub(file["url"], reglist), sha256_online, sha256_local))
+                                      else:
+                                          suffix = '*'
+                                          print('file: {} -- may not exists'.format(pathstrsub(data_index["releases"][key], reglist)))
+                                      if key in lkms.keys():
+                                          lkms[key][extdir + suffix] = data_index["info"]["description"]
+                                      else:
+                                          lkms[key] = { extdir + suffix: data_index["info"]["description"]}
+                              except Exception as err:
+                                  print(err)
+              except Exception as err:
+                  print(err)
+              return lkms
+
+          if __name__ == '__main__':
+              exts = {}
+              lkms = {}
+              print('####################### pocopico #######################')
+              reglist=[]
+              reglist.append(['https://raw.githubusercontent.com/pocopico/rp-ext/master/',''])
+              reglist.append(['https://github.com/pocopico/rp-ext/raw/main/',''])
+              reglist.append(['https://github.com/pocopico/rp-ext/blob/main/',''])
+              reglist.append(['https://raw.githubusercontent.com/jim3ma/synology-igc/master/',''])
+              exts["pocopico"] = getextslist('rp-ext_pocopico', reglist)
+              lkms["pocopico"] = getlkmslist('rp-ext_pocopico', reglist)
+
+              print('#######################  wjz304  #######################')
+              reglist=[]
+              reglist.append(['https://raw.githubusercontent.com/wjz304/rp-ext/master/',''])
+              reglist.append(['https://raw.githubusercontent.com/jim3ma/synology-igc/master/',''])
+              exts["wjz304"] = getextslist('rp-ext_wjz304', reglist)
+              lkms["wjz304"] = getlkmslist('rp-ext_wjz304', reglist)
+
+              if len(exts) > 0:
+                  print('#######################   exts   #######################')
+                  print(json.dumps(exts, indent=4))
+                  with open(os.path.join(root, 'exts.json'), 'w', encoding='utf-8') as f:
+                      f.write(json.dumps(exts, indent=4))
+
+              if len(lkms) > 0:
+                  print('#######################   lkms   #######################')
+                  print(json.dumps(lkms, indent=4))
+                  with open(os.path.join(root, 'lkms.json'), 'w', encoding='utf-8') as f:
+                      f.write(json.dumps(lkms, indent=4))
+
+      - name: Check and Push
+        run: |
+          if [ -n "$(git status -s | grep -E 'exts.json|lkms.json')" ]; then
+            git add $(git status -s | grep -E 'exts.json|lkms.json' | awk '{printf " %s", $2}')
+            git commit -m "update $(date +%Y-%m-%d" "%H:%M:%S)"
+            git push -f
+          fi
+
+
+  loads:
+    runs-on: ubuntu-latest
+    needs: exts
+    steps:
+      - name: Checkout
+        uses: actions/checkout@main
+
+      - name: Initialization environment
+        run : |
+          git config --global user.email "github-actions[bot]@users.noreply.github.com"
+          git config --global user.name "github-actions[bot]"
+          sudo timedatectl set-timezone "Asia/Shanghai"
+
+      - name: Checkout redpill-load s
+        run: |
+          sudo rm -rf redpill-load_pocopico_develop
+          git clone --branch develop https://github.com/pocopico/redpill-load.git redpill-load_pocopico_develop
+
+          sudo rm -rf redpill-load_pocopico_jun
+          git clone --branch jun https://github.com/pocopico/redpill-load.git redpill-load_pocopico_jun
+
+          sudo rm -rf redpill-load_jumkey_develop
+          git clone --branch develop https://github.com/jumkey/redpill-load.git redpill-load_jumkey_develop
+
+          sudo rm -rf redpill-load_PeterSuh-Q3_master
+          git clone --branch master https://github.com/PeterSuh-Q3/redpill-load.git redpill-load_PeterSuh-Q3_master
+
+          sudo rm -rf redpill-load_wjz304_test-dev
+          git clone --branch test-dev https://github.com/wjz304/redpill-load.git redpill-load_wjz304_test-dev
+
+          sudo rm -rf redpill-load_wjz304_test-jun
+          git clone --branch test-jun https://github.com/wjz304/redpill-load.git redpill-load_wjz304_test-jun
+
+      - name: Get loads lsit
+        shell: python
+        run: |
+          # -*- coding: utf-8 -*-
+          import os, json
+
+          root = '' # os.path.dirname(os.path.abspath(__file__))
+
+          def getloadlist(work = 'redpill-load', ignore=[]):
+              load = {}
+              try:
+                  lkms = {}
+                  with open('lkms.json', mode="r") as f:
+                      lkms = json.loads(f.read())['wjz304']    # 暂时只匹配自己
+
+                  platforms = os.listdir(os.path.join(root, work, 'config'))
+                  platforms.sort()
+                  print(platforms)
+                  for platform in platforms:
+                      if platform.startswith('.') or platform.startswith('_'):
+                          continue
+                      if os.path.isdir(os.path.join(root, work, 'config', platform)):
+                          versions = os.listdir(os.path.join(root, work, 'config', platform))
+                          versions.sort()
+                          print(versions)
+                          for version in versions:
+                              if version in ignore:
+                                  continue
+                              if os.path.exists(os.path.join(root, work, 'config', platform, version, 'config.json')):
+                                  key = platform.replace('+', 'p').lower() + '_' + version.split('-')[-1]
+                                  if key in lkms:
+                                      if not all(item.endswith('*') or item.endswith('#') for item in lkms[key]):
+                                          if platform not in load:
+                                              load[platform] = []
+                                          load[platform].append(version)
+
+              except Exception as err:
+                  print(err)
+              return load
+
+          if __name__ == '__main__':
+              loads = {}
+              ignore=['7.0-41222', '7.0-41890', '7.1.0-42550', '7.1.0-42621', '7.1.1-42951']
+
+              print('################### pocopico_develop ###################')
+              loads["pocopico_develop"] = getloadlist('redpill-load_pocopico_develop', ignore)
+
+              print('##################### pocopico_jun #####################')
+              loads["pocopico_jun"] = getloadlist('redpill-load_pocopico_jun', ignore)
+
+              print('#################### jumkey_develop ####################')
+              loads["jumkey_develop"] = getloadlist('redpill-load_jumkey_develop', ignore)
+
+              print('################## PeterSuh-Q3_master ##################')
+              loads["PeterSuh-Q3_master"] = getloadlist('redpill-load_PeterSuh-Q3_master', ignore)
+
+              print('################## wjz304_test-dev ##################')
+              loads["wjz304_test-dev"] = getloadlist('redpill-load_wjz304_test-dev', ignore)
+
+              print('################## wjz304_test-jun ##################')
+              loads["wjz304_test-jun"] = getloadlist('redpill-load_wjz304_test-jun', ignore)
+
+              if len(loads) > 0:
+                  print('#######################  loads   #######################')
+                  print(json.dumps(loads, indent=4))
+                  with open(os.path.join(root, 'loads.json'), 'w', encoding='utf-8') as f:
+                      f.write(json.dumps(loads, indent=4))
+
+      - name: Check and Push
+        run: |
+          if [ -n "$(git status -s | grep loads.json)" ]; then
+            git add loads.json
+            git commit -m "update $(date +%Y-%m-%d" "%H:%M:%S)"
+            git push -f
+          fi
