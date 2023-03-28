@@ -43,21 +43,6 @@ jobs:
           svn co https://github.com/jim3ma/synology-igc/trunk/igc rp-ext_pocopico/igc
 
 
-          sudo rm -rf rp-ext_wjz304
-          git clone https://github.com/wjz304/rp-ext rp-ext_wjz304
-          # 容错
-          rm -f rp-ext_wjz304/asix/releases/ds3617xs_42218.json
-          rm -f rp-ext_wjz304/ax88179_178a/releases/ds3617xs_42218.json
-          rm -f rp-ext_wjz304/dm9601/releases/ds3617xs_42218.json
-          rm -f rp-ext_wjz304/nct6775/releases/dva3221_42218.json
-          rm -f rp-ext_wjz304/sfc/releases/ds918p_25556.json
-          rm -f rp-ext_wjz304/v9fs/releases/ds918p_42218.json
-
-          #igc 临时对策
-          rm -rf rp-ext_wjz304/igc
-          svn co https://github.com/jim3ma/synology-igc/trunk/igc rp-ext_wjz304/igc
-
-
       - name: Get exts lsit
         shell: python
         run: |
@@ -183,13 +168,6 @@ jobs:
               exts["pocopico"] = getextslist('rp-ext_pocopico', reglist)
               lkms["pocopico"] = getlkmslist('rp-ext_pocopico', reglist)
 
-              print('#######################  wjz304  #######################')
-              reglist=[]
-              reglist.append(['https://raw.githubusercontent.com/wjz304/rp-ext/master/',''])
-              reglist.append(['https://raw.githubusercontent.com/jim3ma/synology-igc/master/',''])
-              exts["wjz304"] = getextslist('rp-ext_wjz304', reglist)
-              lkms["wjz304"] = getlkmslist('rp-ext_wjz304', reglist)
-
               if len(exts) > 0:
                   print('#######################   exts   #######################')
                   print(json.dumps(exts, indent=4))
@@ -257,7 +235,7 @@ jobs:
               try:
                   lkms = {}
                   with open('lkms.json', mode="r") as f:
-                      lkms = json.loads(f.read())['wjz304']    # 暂时只匹配自己
+                      lkms = json.loads(f.read())['pocopico']
 
                   platforms = os.listdir(os.path.join(root, work, 'config'))
                   platforms.sort()

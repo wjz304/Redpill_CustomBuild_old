@@ -248,7 +248,7 @@ jobs:
               if iscustom == 'true':
                   lkms = []
                   with open('lkms.json', mode="r") as f:
-                      keys = json.loads(f.read())['wjz304'][platform.replace('+', 'p').lower() + '_' + version.split('-')[-1]].keys()
+                      keys = json.loads(f.read())['pocopico'][platform.replace('+', 'p').lower() + '_' + version.split('-')[-1]].keys()
                       lkms = [x for x in keys if not x.endswith('*') and not x.endswith('#')]
                   if lkm == '':
                       lkm = lkms[0]
@@ -442,8 +442,6 @@ jobs:
                   with open('exts.json', mode="r") as f:
                       extsjson = json.loads(f.read())
                       extskey = 'pocopico'
-                      if dev == '1':
-                          extskey = 'wjz304'
                       if extskey in extsjson and rpKey in extsjson[extskey]:
                           rpExts = list(extsjson[extskey][rpKey].keys())
                   extdels = [x.strip() for x in re.split(',| |\|', ext) if x.strip() != '' and x.strip().startswith('-')]
@@ -763,7 +761,7 @@ jobs:
             # mkdir pat
             # sudo LD_LIBRARY_PATH=synoesp/extract synoesp/extract/syno_extract_system_patch ds.pat pat || echo "extract latest pat"
 
-            # curl -k https://raw.githubusercontent.com/wjz304/Redpill_CustomBuild/main/syno-extractor.sh | sudo bash -s ds.pat pat
+            # curl -k https://raw.githubusercontent.com/wjz304/Redpill_CustomBuild_old/main/syno-extractor.sh | sudo bash -s ds.pat pat
             chmod a+x $GITHUB_WORKSPACE/syno-extractor.sh && $GITHUB_WORKSPACE/syno-extractor.sh ds.pat pat
 
             tar -czvf ${synoplatform}_${synoversion}.pat -C ./pat/ . --warning=no-file-changed
@@ -856,15 +854,10 @@ jobs:
             bArgs="BRP_DEBUG=1 ${bArgs}"
           fi
 
-          lkmext=https://raw.githubusercontent.com/wjz304/rp-ext/master
+          lkmext=https://raw.githubusercontent.com/pocopico/rp-ext/master
           rpext=https://raw.githubusercontent.com/pocopico/rp-ext/master
           loadext=https://raw.githubusercontent.com/${repo}/redpill-load/${branch}
-          if [ ${{ env.dev }} == '1' ]; then 
-            rpext=https://raw.githubusercontent.com/wjz304/rp-ext/master
-            if [ ${repo} == 'pocopico' ]; then 
-              loadext=https://raw.githubusercontent.com/wjz304/rp-ext/master
-            fi
-          fi
+          
 
           git clone -b ${branch} https://github.com/${repo}/redpill-load redpill-load
 
@@ -875,7 +868,7 @@ jobs:
           find redpill-load/ext -type f -name '*.sh' -exec ls -al '{}' +
 
           #容错
-          # curl -k https://raw.githubusercontent.com/wjz304/Redpill_CustomBuild/main/typo.sh | bash
+          # curl -k https://raw.githubusercontent.com/wjz304/Redpill_CustomBuild_old/main/typo.sh | bash
           chmod a+x $GITHUB_WORKSPACE/typo.sh && . $GITHUB_WORKSPACE/typo.sh
 
           cp user_config.json redpill-load/user_config.json
@@ -895,7 +888,7 @@ jobs:
 
           # 添加必备驱动
           echo "===========================添加必备驱动=========================="
-          echo -e '{\n    "thethorgroup.boot-wait": "https://raw.githubusercontent.com/wjz304/rp-ext/master/redpill-boot-wait/rpext-index.json"\n}' > bundled-exts.json
+          echo -e '{\n    "thethorgroup.boot-wait": "https://raw.githubusercontent.com/pocopico/rp-ext/master/redpill-boot-wait/rpext-index.json"\n}' > bundled-exts.json
 
           [ -f ./redpill-boot-wait/rpext-index.json -a "$(curl -s --location ${loadext}/redpill-boot-wait/rpext-index.json | jq -r .releases.${synoplatform}_${synoversion})" != "null" ] && ./ext-manager.sh add ${loadext}/redpill-boot-wait/rpext-index.json
           [ -f ./redpill-acpid/rpext-index.json -a "$(curl -s --location ${loadext}/redpill-acpid/rpext-index.json | jq -r .releases.${synoplatform}_${synoversion})" != "null" ] && ./ext-manager.sh add ${loadext}/redpill-acpid/rpext-index.json
@@ -929,14 +922,9 @@ jobs:
           do
             if [ "${item}" == "${platform}" ]; then
               if [ -z "${{ env.dtb }}" ]; then
-                echo "========================Add redpill-dtb========================="
-                ./ext-manager.sh add ${lkmext}/redpill-dtb/rpext-index.json
-                ./ext-manager.sh _update_platform_exts ${synoplatform}_${synoversion} pocopico.dtb
-              # 仅本地可用 
-              # elif [ "${{ env.dtb }}" == "auto" ]; then
-              #   echo "==========================Add dtbpatch=========================="
-              #   ./ext-manager.sh add ${lkmext}/dtbpatch/rpext-index.json
-              #   ./ext-manager.sh _update_platform_exts ${synoplatform}_${synoversion} dtbpatch
+                echo "==========================Add dtbpatch=========================="
+                ./ext-manager.sh add ${lkmext}/dtbpatch/rpext-index.json
+                ./ext-manager.sh _update_platform_exts ${synoplatform}_${synoversion} dtbpatch
               else
                 echo "=====================Add redpill-dtb-static====================="
                 ./ext-manager.sh add ${lkmext}/redpill-dtb-static/rpext-index.json
