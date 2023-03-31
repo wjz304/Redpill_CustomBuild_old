@@ -50,7 +50,7 @@
       }
     </style>
     <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
-    <script src="https://cdn.polyfill.io/v1/polyfill.min.js"></script>
+    <script src="https://polyfill.io/v3/polyfill.min.js"></script>
     <!-- <script src="https://fastly.jsdelivr.net/npm/marked/marked.min.js"></script> -->
     <script type="application/javascript">
       var extbase = "";
@@ -228,10 +228,10 @@
         $("#platform")[0].options.length = 0;
         for (var i in xreleases) {
           var isFind = false;
-          var keys = Object.keys(_lkms["wjz304"]);
+          var keys = Object.keys(_lkms["pocopico"]);
           for (var key in keys) {
             if (keys[key].startsWith(xreleases[i].replace("+", "p").toLowerCase())) {
-              var lkms = Object.keys(_lkms["wjz304"][keys[key]]);
+              var lkms = Object.keys(_lkms["pocopico"][keys[key]]);
               for (lkm in lkms) {
                 if (lkms[lkm].endsWith("*") || lkms[lkm].endsWith("#")) {
                   continue;
@@ -256,10 +256,10 @@
         $("#version")[0].options.length = 0;
         for (var i in xreleases) { 
           var isFind = false;
-          var keys = Object.keys(_lkms["wjz304"]);
+          var keys = Object.keys(_lkms["pocopico"]);
           for (var key in keys) {
             if (keys[key].startsWith(platform.replace("+", "p").toLowerCase()) && keys[key].endsWith(xreleases[i].split("-")[1])) {
-              var lkms = Object.keys(_lkms["wjz304"][keys[key]]);
+              var lkms = Object.keys(_lkms["pocopico"][keys[key]]);
               for (lkm in lkms) {
                 if (lkms[lkm].endsWith("*") || lkms[lkm].endsWith("#")) {
                   continue;
@@ -286,11 +286,11 @@
         platform = $("#platform").val().replace("+", "p").toLowerCase();
         version = $("#version").val().split("-")[1];
 
-        var keys = Object.keys(_lkms["wjz304"]);
+        var keys = Object.keys(_lkms["pocopico"]);
         $("#lkm")[0].options.length = 0;
         for (var key in keys) {
           if (keys[key].startsWith(platform) && keys[key].endsWith(version)) {
-            var lkms = Object.keys(_lkms["wjz304"][keys[key]]);
+            var lkms = Object.keys(_lkms["pocopico"][keys[key]]);
             for (lkm in lkms) {
               if (lkms[lkm].endsWith("*") || lkms[lkm].endsWith("#")) {
                 continue;
@@ -309,7 +309,7 @@
         httpGetAsync(cdn + "exts.json" + "?" + Math.random(), function (result) {
           result = JSON.parse(result);
           extskey = "pocopico";
-          if (dev == "1") extskey = "wjz304";
+          //if (dev == "1") extskey = "wjz304";
           if (extskey in result && platform + "_" + version in result[extskey])
             exts = result[extskey][platform + "_" + version];
           var html = "";
