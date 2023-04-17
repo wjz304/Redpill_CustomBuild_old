@@ -61,7 +61,6 @@ fi
 [ -e redpill-load/config/RS4021xs+/7.0.1-42218/config.json ] && sed -i 's/b4cc62e9953f226960de98b65887e17dd6df5fa0ad28f665e0b4660dbd5f2fa8/d6059bcd7160ed1f775a9323599ac8860b60ada32f0a4f3e5ca166c15a17784e/g' redpill-load/config/RS4021xs+/7.0.1-42218/config.json
 [ -e redpill-load/config/RS4021xs+/7.0.1-42218/config.json ] && sed -i 's/3510afe5b3dfe3662bfe054c1728c8794911da431718b533cd03d2a2c061ffd5/f2b99b4c05559376d34d30d6446c30a8b3f44f516e5a041299d03be9c7fd0095/g' redpill-load/config/RS4021xs+/7.0.1-42218/config.json
 
-[ -d redpill-load/config/SA6400/7.1.1-42962 -a ! -f redpill-load/config/SA6400/7.1.1-42962/zImage-001-SA6400-42962-ramdisk-and-header.bsp ] && curl -L https://raw.githubusercontent.com/wjz304/redpill-load/test-dev/config/SA6400/7.1.1-42962/zImage-001-SA6400-42962-ramdisk-and-header.bsp -o redpill-load/config/SA6400/7.1.1-42962/zImage-001-SA6400-42962-ramdisk-and-header.bsp
 [ -e redpill-load/config/SA6400/7.1.1-42962/config.json ] && sed -i 's/redpill-linux-v4.4.180+.ko/redpill-linux-v5.10.55+.ko/g' redpill-load/config/SA6400/7.1.1-42962/config.json
 
 if [ ${repo} == 'pocopico' -a ${branch} == 'develop' ]; then 
