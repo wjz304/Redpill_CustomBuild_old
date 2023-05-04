@@ -3770,6 +3770,9 @@
         },
         "ds923p_42218": {
             "powersched": "Adds Driver for PC-style 'CMOS' RTCs Support"
+        },
+        "ds3622xsp_64551": {
+            "vmxnet3": "Adds VMware vmxnet3 virtual NIC driver Support"
         }
     }
 }
