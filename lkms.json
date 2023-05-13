@@ -305,6 +305,31 @@
             "redpilldev": "Adds  Support",
             "redpillprod": "Adds  Support"
         },
+        "ds918p_64551": {
+            "redpill": "Adds  Support",
+            "redpilldev": "Adds  Support",
+            "redpillprod": "Adds  Support"
+        },
+        "ds1019p_64551": {
+            "redpill": "Adds  Support",
+            "redpilldev": "Adds  Support",
+            "redpillprod": "Adds  Support"
+        },
+        "ds920p_64551": {
+            "redpill": "Adds  Support",
+            "redpilldev": "Adds  Support",
+            "redpillprod": "Adds  Support"
+        },
+        "ds1520p_64551": {
+            "redpill": "Adds  Support",
+            "redpilldev": "Adds  Support",
+            "redpillprod": "Adds  Support"
+        },
+        "dva1622_64551": {
+            "redpill": "Adds  Support",
+            "redpilldev": "Adds  Support",
+            "redpillprod": "Adds  Support"
+        },
         "ds1621p_64551": {
             "redpill": "Adds  Support",
             "redpilldev": "Adds  Support",
@@ -315,22 +340,52 @@
             "redpilldev": "Adds  Support",
             "redpillprod": "Adds  Support"
         },
-        "ds3617xs_64551": {
+        "fs2500_64551": {
             "redpill": "Adds  Support",
             "redpilldev": "Adds  Support",
             "redpillprod": "Adds  Support"
+        },
+        "sa6400_64551": {
+            "redpill#": "Adds  Support",
+            "redpilldev#": "Adds  Support",
+            "redpillprod#": "Adds  Support"
+        },
+        "sa3600_64551": {
+            "redpill#": "Adds  Support",
+            "redpilldev#": "Adds  Support",
+            "redpillprod#": "Adds  Support"
         },
         "ds3622xsp_64551": {
             "redpill#": "Adds  Support",
             "redpilldev#": "Adds  Support",
             "redpillprod#": "Adds  Support"
         },
-        "ds918p_64551": {
+        "ds1621xsp_64551": {
+            "redpill#": "Adds  Support",
+            "redpilldev#": "Adds  Support",
+            "redpillprod#": "Adds  Support"
+        },
+        "rs4021xsp_64551": {
+            "redpill#": "Adds  Support",
+            "redpilldev#": "Adds  Support",
+            "redpillprod#": "Adds  Support"
+        },
+        "ds3617xs_64551": {
             "redpill": "Adds  Support",
             "redpilldev": "Adds  Support",
             "redpillprod": "Adds  Support"
         },
-        "ds920p_64551": {
+        "rs3618xs_64551": {
+            "redpill": "Adds  Support",
+            "redpilldev": "Adds  Support",
+            "redpillprod": "Adds  Support"
+        },
+        "dva3219_64551": {
+            "redpill": "Adds  Support",
+            "redpilldev": "Adds  Support",
+            "redpillprod": "Adds  Support"
+        },
+        "dva3221_64551": {
             "redpill": "Adds  Support",
             "redpilldev": "Adds  Support",
             "redpillprod": "Adds  Support"
@@ -345,15 +400,15 @@
             "redpilldev": "Adds  Support",
             "redpillprod": "Adds  Support"
         },
-        "dva1622_64551": {
-            "redpill": "Adds  Support",
-            "redpilldev": "Adds  Support",
-            "redpillprod": "Adds  Support"
+        "ds720p_64551": {
+            "redpill#": "Adds  Support",
+            "redpilldev#": "Adds  Support",
+            "redpillprod#": "Adds  Support"
         },
-        "dva3221_64551": {
-            "redpill": "Adds  Support",
-            "redpilldev": "Adds  Support",
-            "redpillprod": "Adds  Support"
+        "sa3400_64551": {
+            "redpill#": "Adds  Support",
+            "redpilldev#": "Adds  Support",
+            "redpillprod#": "Adds  Support"
         },
         "endofmodel": {
             "redpill*": "Adds  Support",
