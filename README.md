@@ -140,11 +140,10 @@ ext              | ×    |-               | 请输入需要集成的扩展, 多�
     echo "${platform}"  
     \`\`\`  
     
-</br>
-<details><summary>🍻打赏一下</summary>  
-<div><img src="https://raw.githubusercontent.com/wjz304/wjz304/master/my/20220908134226.jpg" width="500"></div>  
-</details>  
-</br>
+## 打赏一下🍻
+* > ### 作者: Ing  交流群 QQ群: [21609194](https://qm.qq.com/cgi-bin/qm/qr?k=8AU8VJ82OR2HB_77g3vsjGKA-rm-p67B&jump_from=webapi)  QQ频道: redpill2syno  TG: [https://t.me/Redpill_CustomBuild](https://t.me/Redpill_CustomBuild)  
+* <div><img src="https://raw.githubusercontent.com/wjz304/wjz304/master/my/20220908134226.jpg" width="500"></div>  
+
 
 ## 鸣谢
 https://github.com/RedPill-TTG/redpill-load  
